@@ -1,4 +1,5 @@
 #include "ProcessCommandLine.hpp"
+#include "CipherMode.hpp"
 
 #include <iostream>
 #include <string>
@@ -23,11 +24,11 @@ bool processCommandLine(const std::vector<std::string>& cmdLineArgs,
             // Set the indicator and terminate the loop
             settings.helpRequested = true;
             break;
-        } else if (cmdLineArgs[i] == "--version") {
+        } else if (cmdLineArgs[i] == "--version" || cmdLineArgs[i] == "-v") {
             // Set the indicator and terminate the loop
             settings.versionRequested = true;
             break;
-        } else if (cmdLineArgs[i] == "-i") {
+        } else if (cmdLineArgs[i] == "-i" || cmdLineArgs[i] == "--input") {
             // Handle input file option
             // Next element is filename unless "-i" is the last argument
             if (i == nCmdLineArgs - 1) {
@@ -41,7 +42,7 @@ bool processCommandLine(const std::vector<std::string>& cmdLineArgs,
                 settings.inputFile = cmdLineArgs[i + 1];
                 ++i;
             }
-        } else if (cmdLineArgs[i] == "-o") {
+        } else if (cmdLineArgs[i] == "-o" || cmdLineArgs[i] == "--output") {
             // Handle output file option
             // Next element is filename unless "-o" is the last argument
             if (i == nCmdLineArgs - 1) {
@@ -55,7 +56,7 @@ bool processCommandLine(const std::vector<std::string>& cmdLineArgs,
                 settings.outputFile = cmdLineArgs[i + 1];
                 ++i;
             }
-        } else if (cmdLineArgs[i] == "-k") {
+        } else if (cmdLineArgs[i] == "-k" || cmdLineArgs[i] == "--key") {
             // Handle cipher key option
             // Next element is the key unless -k is the last argument
             if (i == nCmdLineArgs - 1) {
@@ -69,10 +70,10 @@ bool processCommandLine(const std::vector<std::string>& cmdLineArgs,
                 settings.cipherKey = cmdLineArgs[i + 1];
                 ++i;
             }
-        } else if (cmdLineArgs[i] == "--encrypt") {
-            settings.encrypt = true;
-        } else if (cmdLineArgs[i] == "--decrypt") {
-            settings.encrypt = false;
+        } else if (cmdLineArgs[i] == "--encrypt" || cmdLineArgs[i] == "-e") {
+            settings.encrypt = CipherMode::Encrypt;
+        } else if (cmdLineArgs[i] == "--decrypt" || cmdLineArgs[i] == "-d") {
+            settings.encrypt = CipherMode::Decrypt;
         } else {
             // Have encoutered an unknown flag, output an error message,
             // set the flag to indicate the error and terminate the loop
